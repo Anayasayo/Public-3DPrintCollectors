@@ -1,0 +1,17 @@
+{
+  "name": "3dprintcollectors",
+  "private": true,
+  "version": "1.0.0",
+  "description": "3DPrintCollectors - local MTG collection & Commander deck tracker (TCGplayer pricing)",
+  "workspaces": [
+    "server",
+    "web"
+  ],
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "npm run build -w web",
+    "start": "npm run build && npm run start -w server",
+    "serve": "npm run start -w server",
+    "test": "npm test -w server"
+  }
+}

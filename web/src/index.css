@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0c0e13;
+  --color-panel: #141821;
+  --color-panel2: #1b2130;
+  --color-line: #262d3d;
+  --color-muted: #8b93a7;
+  --color-gold: #f5b841;
+  --color-gold2: #ffd982;
+  --color-good: #3ecf8e;
+  --color-bad: #f0616d;
+  --color-accent: #7c9cff;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Space Grotesk", "Inter", sans-serif;
+}
+
+/*
+ * Everything is sized in rem, so the whole UI scales with this one value:
+ * ~15px on a phone, ~17.5px on a 13" laptop, 18px on a desktop monitor.
+ */
+html {
+  font-size: clamp(15px, 0.35vw + 12.8px, 18px);
+}
+
+html, body, #root { height: 100%; }
+body {
+  background: var(--color-ink);
+  color: #e7eaf2;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: #2a3142; border-radius: 8px; border: 2px solid var(--color-ink); }
+::-webkit-scrollbar-track { background: transparent; }
+
+@utility btn {
+  @apply inline-flex min-h-9 items-center justify-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer select-none;
+}
+@utility btn-primary { @apply btn bg-gold text-ink hover:bg-gold2; }
+@utility btn-ghost { @apply btn bg-panel2 text-slate-200 hover:bg-line border border-line; }
+@utility btn-danger { @apply btn bg-bad/15 text-bad hover:bg-bad/25 border border-bad/30; }
+@utility btn-good { @apply btn bg-good/15 text-good hover:bg-good/25 border border-good/30; }
+@utility btn-sm { @apply min-h-8 px-2 py-1 text-xs rounded-md; }
+
+/* Finger-friendly hit areas on touch screens. */
+@media (pointer: coarse) {
+  .btn, .btn-primary, .btn-ghost, .btn-danger, .btn-good { min-height: 2.75rem; }
+  .btn-sm { min-height: 2.25rem; }
+  .input { min-height: 2.75rem; }
+}
+
+@utility input {
+  @apply w-full min-h-9 rounded-lg border border-line bg-panel2 px-3 py-1.5 text-sm text-slate-100 placeholder:text-muted outline-none focus:border-gold/60;
+}
+@utility card-panel { @apply rounded-xl border border-line bg-panel; }
+@utility label { @apply text-xs font-medium uppercase tracking-wide text-muted; }
+@utility chip { @apply inline-flex items-center rounded-full px-2 py-0.5 text-[0.7rem] font-medium leading-5 whitespace-nowrap; }
+
+/* Page shell: full width on small screens, capped so ultrawide monitors don't stretch tables. */
+@utility page { @apply mx-auto w-full max-w-[110rem]; }
+
+/* Any wide table lives inside this so it scrolls instead of squashing. */
+@utility table-wrap { @apply -mx-1 w-[calc(100%+0.5rem)] overflow-x-auto px-1; }
+
+/* Fluid card grids: the tile size follows the viewport, the column count follows from it. */
+@utility grid-cards {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(8.5rem, 16vw, 12rem), 1fr));
+}
+@utility grid-cards-lg {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(10rem, 19vw, 15rem), 1fr));
+}
+
+.shiny-text { display: inline-block; }
+
+/* Phones: let the table fit the screen (names wrap) so price and quantity stay visible.
+   From sm up it takes its natural width inside .table-wrap and scrolls if needed. */
+table.data { @apply w-full text-sm; }
+@media (min-width: 640px) { table.data { min-width: max-content; } }
+table.data th { @apply text-left font-medium text-muted text-xs uppercase tracking-wide px-2.5 py-2 border-b border-line bg-panel sticky top-0 z-10 whitespace-nowrap; }
+table.data td { @apply px-2.5 py-2 border-b border-line/60 align-middle; }
+@media (max-width: 639px) {
+  table.data th, table.data td { @apply px-1.5 py-1.5; }
+}
+table.data tr:hover td { @apply bg-panel2/60; }
+
+/* Columns that drop away as the window narrows (marked in the markup). */
+@media (max-width: 1279px) { .col-xl { display: none; } }
+@media (max-width: 1023px) { .col-lg { display: none; } }
+@media (max-width: 767px) { .col-md { display: none; } }
+@media (max-width: 639px) { .col-sm { display: none; } }
+
+/* Charts are clickable; don't draw the browser focus ring around the whole chart after a click. */
+.recharts-wrapper :focus, .recharts-surface:focus { outline: none; }
